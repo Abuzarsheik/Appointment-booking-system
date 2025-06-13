@@ -42,8 +42,7 @@ interface Appointment {
 const DEMO_CREDENTIALS = {
   admin: { email: 'admin@medbook.com', password: 'admin123', role: 'Admin' },
   client: { email: 'demo@medbook.com', password: 'demo123', role: 'Client' },
-  staff: { email: 'sarah.johnson@medbook.com', password: 'staff123', role: 'Staff' },
-  user: { email: 'john.smith@example.com', password: 'client123', role: 'User' }
+  staff: { email: 'sarah.johnson@medbook.com', password: 'staff123', role: 'Staff' }
 };
 
 function App() {
@@ -417,7 +416,7 @@ function App() {
             <h3 className="text-sm font-semibold text-blue-900 mb-3 text-center">
               🎯 Portfolio Demo - Quick Login
             </h3>
-            <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="grid grid-cols-3 gap-2 text-xs">
               <button
                 onClick={() => fillCredentials('admin')}
                 className="bg-red-100 hover:bg-red-200 text-red-800 px-3 py-2 rounded transition-colors"
@@ -435,12 +434,6 @@ function App() {
                 className="bg-purple-100 hover:bg-purple-200 text-purple-800 px-3 py-2 rounded transition-colors"
               >
                 👩‍⚕️ Staff Demo
-              </button>
-              <button
-                onClick={() => fillCredentials('user')}
-                className="bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-2 rounded transition-colors"
-              >
-                👨‍💼 User Demo
               </button>
             </div>
             <div className="mt-2 text-center">
@@ -501,9 +494,9 @@ function App() {
           {/* Credentials Reference */}
           <div className="mt-4 p-3 bg-gray-50 rounded text-xs text-gray-600">
             <div className="font-semibold mb-1">Demo Credentials:</div>
-            <div>Admin: admin@medbook.com / admin123</div>
-            <div>Client: demo@medbook.com / demo123</div>
-            <div>Staff: sarah.johnson@medbook.com / staff123</div>
+            <div>👨‍💼 Admin: admin@medbook.com / admin123</div>
+            <div>👤 Client: demo@medbook.com / demo123</div>
+            <div>👩‍⚕️ Staff: sarah.johnson@medbook.com / staff123</div>
           </div>
         </div>
       </div>
@@ -612,13 +605,16 @@ function App() {
     );
   };
 
-  const Dashboard = () => (
-    <div className="min-h-screen bg-gray-50">
+  const Dashboard = () => {
+    const DashboardHeader = () => (
       <nav className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-4">
               <h1 className="text-xl font-bold text-gray-900">🩺 MedBook</h1>
+              <span className="px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                {currentUser?.role?.toUpperCase()}
+              </span>
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-gray-700">Hello, {currentUser?.name}</span>
@@ -632,67 +628,207 @@ function App() {
           </div>
         </div>
       </nav>
+    );
 
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-4 sm:px-0">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <button
-              onClick={() => setCurrentView('book')}
-              className="bg-blue-600 text-white p-6 rounded-xl hover:bg-blue-700 transition-colors"
-            >
-              <div className="text-3xl mb-2">📅</div>
-              <h3 className="text-lg font-semibold">Book Appointment</h3>
-              <p className="text-blue-100 text-sm">Schedule a new appointment</p>
-            </button>
-            
-            <button
-              onClick={() => setCurrentView('services')}
-              className="bg-green-600 text-white p-6 rounded-xl hover:bg-green-700 transition-colors"
-            >
-              <div className="text-3xl mb-2">🏥</div>
-              <h3 className="text-lg font-semibold">View Services</h3>
-              <p className="text-green-100 text-sm">Browse available services</p>
-            </button>
-            
-            <div className="bg-purple-600 text-white p-6 rounded-xl">
-              <div className="text-3xl mb-2">📊</div>
-              <h3 className="text-lg font-semibold">My Appointments</h3>
-              <p className="text-purple-100 text-sm">{appointments?.length || 0} total</p>
+    // Admin Dashboard - Full system access
+    if (currentUser?.role === 'admin') {
+      return (
+        <div className="min-h-screen bg-gray-50">
+          <DashboardHeader />
+          <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div className="px-4 py-4 sm:px-0">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div className="bg-red-600 text-white p-6 rounded-xl">
+                  <div className="text-3xl mb-2">👥</div>
+                  <h3 className="text-lg font-semibold">All Users</h3>
+                  <p className="text-red-100 text-sm">System management</p>
+                </div>
+                <div className="bg-blue-600 text-white p-6 rounded-xl">
+                  <div className="text-3xl mb-2">📅</div>
+                  <h3 className="text-lg font-semibold">All Appointments</h3>
+                  <p className="text-blue-100 text-sm">{appointments?.length || 0} total</p>
+                </div>
+                <button
+                  onClick={() => setCurrentView('services')}
+                  className="bg-green-600 text-white p-6 rounded-xl hover:bg-green-700 transition-colors"
+                >
+                  <div className="text-3xl mb-2">🏥</div>
+                  <h3 className="text-lg font-semibold">Manage Services</h3>
+                  <p className="text-green-100 text-sm">Add/Edit services</p>
+                </button>
+                <div className="bg-purple-600 text-white p-6 rounded-xl">
+                  <div className="text-3xl mb-2">📊</div>
+                  <h3 className="text-lg font-semibold">Reports</h3>
+                  <p className="text-purple-100 text-sm">Analytics & insights</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">📈 Admin Overview - All System Appointments</h2>
+                {!appointments || appointments.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">No appointments in the system yet.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {appointments.map((appointment) => (
+                      <div key={appointment.id} className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-medium text-gray-900">{appointment.serviceName}</h3>
+                            <p className="text-gray-600 text-sm">Client: {appointment.clientName}</p>
+                            <p className="text-gray-600 text-sm">Provider: {appointment.providerName}</p>
+                            <p className="text-gray-500 text-sm">{appointment.date} at {appointment.time}</p>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            appointment.status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' :
+                            appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                            appointment.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {appointment.status}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
+        </div>
+      );
+    }
 
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Appointments</h2>
-            {!appointments || appointments.length === 0 ? (
-              <p className="text-gray-500 text-center py-8">No appointments yet. Book your first appointment!</p>
-            ) : (
-              <div className="space-y-4">
-                {appointments.map((appointment) => (
-                  <div key={appointment.id} className="border border-gray-200 rounded-lg p-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-medium text-gray-900">{appointment.serviceName}</h3>
-                        <p className="text-gray-600 text-sm">with {appointment.providerName}</p>
-                        <p className="text-gray-500 text-sm">{appointment.date} at {appointment.time}</p>
-                      </div>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        appointment.status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' :
-                        appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                        appointment.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                        'bg-red-100 text-red-800'
-                      }`}>
-                        {appointment.status}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+    // Staff Dashboard - Patient management and schedule
+    if (currentUser?.role === 'staff') {
+      const staffAppointments = appointments?.filter(apt => 
+        apt.providerName?.includes(currentUser.firstName) || apt.providerId === currentUser.id
+      ) || [];
+
+      return (
+        <div className="min-h-screen bg-gray-50">
+          <DashboardHeader />
+          <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            <div className="px-4 py-4 sm:px-0">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="bg-purple-600 text-white p-6 rounded-xl">
+                  <div className="text-3xl mb-2">📅</div>
+                  <h3 className="text-lg font-semibold">My Schedule</h3>
+                  <p className="text-purple-100 text-sm">{staffAppointments.length} appointments</p>
+                </div>
+                <div className="bg-blue-600 text-white p-6 rounded-xl">
+                  <div className="text-3xl mb-2">👥</div>
+                  <h3 className="text-lg font-semibold">My Patients</h3>
+                  <p className="text-blue-100 text-sm">Patient management</p>
+                </div>
+                <button
+                  onClick={() => setCurrentView('services')}
+                  className="bg-green-600 text-white p-6 rounded-xl hover:bg-green-700 transition-colors"
+                >
+                  <div className="text-3xl mb-2">🏥</div>
+                  <h3 className="text-lg font-semibold">My Services</h3>
+                  <p className="text-green-100 text-sm">Services I provide</p>
+                </button>
               </div>
-            )}
+
+              <div className="bg-white rounded-xl shadow-sm p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">👩‍⚕️ My Appointments Schedule</h2>
+                {staffAppointments.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">No appointments scheduled yet.</p>
+                ) : (
+                  <div className="space-y-4">
+                    {staffAppointments.map((appointment) => (
+                      <div key={appointment.id} className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-medium text-gray-900">{appointment.serviceName}</h3>
+                            <p className="text-gray-600 text-sm">Patient: {appointment.clientName}</p>
+                            <p className="text-gray-500 text-sm">{appointment.date} at {appointment.time}</p>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            appointment.status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' :
+                            appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                            appointment.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {appointment.status}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Client Dashboard - Personal appointments and booking
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <DashboardHeader />
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <div className="px-4 py-4 sm:px-0">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <button
+                onClick={() => setCurrentView('book')}
+                className="bg-blue-600 text-white p-6 rounded-xl hover:bg-blue-700 transition-colors"
+              >
+                <div className="text-3xl mb-2">📅</div>
+                <h3 className="text-lg font-semibold">Book Appointment</h3>
+                <p className="text-blue-100 text-sm">Schedule a new appointment</p>
+              </button>
+              
+              <button
+                onClick={() => setCurrentView('services')}
+                className="bg-green-600 text-white p-6 rounded-xl hover:bg-green-700 transition-colors"
+              >
+                <div className="text-3xl mb-2">🏥</div>
+                <h3 className="text-lg font-semibold">View Services</h3>
+                <p className="text-green-100 text-sm">Browse available services</p>
+              </button>
+              
+              <div className="bg-purple-600 text-white p-6 rounded-xl">
+                <div className="text-3xl mb-2">📊</div>
+                <h3 className="text-lg font-semibold">My Appointments</h3>
+                <p className="text-purple-100 text-sm">{appointments?.length || 0} total</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm p-6">
+              <h2 className="text-xl font-semibold text-gray-900 mb-4">👤 My Appointments</h2>
+              {!appointments || appointments.length === 0 ? (
+                <p className="text-gray-500 text-center py-8">No appointments yet. Book your first appointment!</p>
+              ) : (
+                <div className="space-y-4">
+                  {appointments.map((appointment) => (
+                    <div key={appointment.id} className="border border-gray-200 rounded-lg p-4">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-medium text-gray-900">{appointment.serviceName}</h3>
+                          <p className="text-gray-600 text-sm">with {appointment.providerName}</p>
+                          <p className="text-gray-500 text-sm">{appointment.date} at {appointment.time}</p>
+                        </div>
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          appointment.status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' :
+                          appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                          appointment.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {appointment.status}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   const BookingForm = () => {
     const [selectedService, setSelectedService] = useState('');

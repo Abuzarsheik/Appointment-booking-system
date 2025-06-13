@@ -19,6 +19,7 @@ const appointmentRoutes = require('./routes/appointments');
 const serviceRoutes = require('./routes/services');
 const userRoutes = require('./routes/users');
 const notificationRoutes = require('./routes/notifications');
+const seedRoutes = require('./routes/seed');
 
 // Import middleware
 const errorHandler = require('./middleware/errorHandler');
@@ -145,6 +146,7 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/services', serviceRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/seed', seedRoutes);
 
 // Error handling middleware
 app.use(notFound);

@@ -3,7 +3,7 @@ const seedData = require('../utils/seedData');
 const router = express.Router();
 
 // Temporary seeding endpoint (remove after use)
-router.post('/seed-production', async (req, res) => {
+router.get('/seed-production', async (req, res) => {
   try {
     console.log('🌱 Starting production database seeding...');
     await seedData();

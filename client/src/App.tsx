@@ -110,7 +110,7 @@ function App() {
         price: { amount: 100, currency: 'USD' },
         category: 'consultation',
         tags: ['general', 'checkup', 'consultation'],
-        providerId: 'dr1',
+        providerId: 'staff-sarah',
         providerName: 'Dr. Sarah Johnson'
       },
       {
@@ -121,7 +121,7 @@ function App() {
         price: { amount: 80, currency: 'USD' },
         category: 'treatment',
         tags: ['dental', 'cleaning', 'oral health'],
-        providerId: 'dr2',
+        providerId: 'dr-michael',
         providerName: 'Dr. Michael Chen'
       },
       {
@@ -132,8 +132,8 @@ function App() {
         price: { amount: 120, currency: 'USD' },
         category: 'therapy',
         tags: ['physical therapy', 'rehabilitation', 'pain management'],
-        providerId: 'pt1',
-        providerName: 'Lisa Williams, PT'
+        providerId: 'staff-sarah',
+        providerName: 'Dr. Sarah Johnson'
       },
       {
         id: '4',
@@ -143,7 +143,7 @@ function App() {
         price: { amount: 200, currency: 'USD' },
         category: 'consultation',
         tags: ['cardiology', 'heart', 'specialist'],
-        providerId: 'dr3',
+        providerId: 'dr-james',
         providerName: 'Dr. James Rodriguez'
       },
       {
@@ -154,7 +154,7 @@ function App() {
         price: { amount: 150, currency: 'USD' },
         category: 'checkup',
         tags: ['dermatology', 'skin', 'screening'],
-        providerId: 'dr4',
+        providerId: 'dr-emily',
         providerName: 'Dr. Emily Davis'
       },
       {
@@ -165,55 +165,119 @@ function App() {
         price: { amount: 130, currency: 'USD' },
         category: 'therapy',
         tags: ['mental health', 'counseling', 'therapy'],
-        providerId: 'dr5',
+        providerId: 'staff-sarah',
         providerName: 'Dr. Sarah Johnson'
+      },
+      {
+        id: '7',
+        name: 'X-Ray Imaging',
+        description: 'Digital X-ray imaging service for diagnostic purposes. Quick and accurate imaging with minimal radiation exposure.',
+        duration: 20,
+        price: { amount: 75, currency: 'USD' },
+        category: 'diagnostic',
+        tags: ['x-ray', 'imaging', 'diagnostic'],
+        providerId: 'dr-lisa',
+        providerName: 'Dr. Lisa Martinez'
+      },
+      {
+        id: '8',
+        name: 'Blood Test Panel',
+        description: 'Comprehensive blood work including CBC, metabolic panel, and lipid profile. Results available within 24 hours.',
+        duration: 15,
+        price: { amount: 95, currency: 'USD' },
+        category: 'laboratory',
+        tags: ['blood test', 'lab work', 'diagnostic'],
+        providerId: 'dr-robert',
+        providerName: 'Dr. Robert Kim'
+      },
+      {
+        id: '9',
+        name: 'Vaccination Service',
+        description: 'Complete vaccination services including flu shots, COVID-19 boosters, and travel vaccinations.',
+        duration: 15,
+        price: { amount: 40, currency: 'USD' },
+        category: 'preventive',
+        tags: ['vaccine', 'immunization', 'preventive'],
+        providerId: 'staff-sarah',
+        providerName: 'Dr. Sarah Johnson'
+      },
+      {
+        id: '10',
+        name: 'Pediatric Checkup',
+        description: 'Comprehensive health checkup for children including growth assessment, developmental screening, and immunization updates.',
+        duration: 30,
+        price: { amount: 85, currency: 'USD' },
+        category: 'pediatric',
+        tags: ['pediatric', 'children', 'checkup'],
+        providerId: 'dr-amanda',
+        providerName: 'Dr. Amanda Wilson'
       }
     ];
 
     setServices(dummyServices);
 
-    // Generate dummy appointments for demo user
+    // Generate comprehensive dummy appointments for all roles
     const today = new Date();
+    
+    // Utility function to create appointment
+    const createAppointment = (id: string, serviceId: string, serviceName: string, clientId: string, clientName: string, providerId: string, providerName: string, dayOffset: number, time: string, status: 'scheduled' | 'confirmed' | 'completed' | 'cancelled') => {
+      const appointmentDate = new Date(today.getTime() + dayOffset * 24 * 60 * 60 * 1000);
+      const [hours, minutes] = time.split(':').map(Number);
+      const appointmentDateTime = new Date(appointmentDate.getTime() + hours * 60 * 60 * 1000 + minutes * 60 * 1000);
+      
+      return {
+        id,
+        serviceId,
+        serviceName,
+        clientId,
+        clientName,
+        providerId,
+        providerName,
+        date: appointmentDate.toISOString().split('T')[0],
+        time,
+        status,
+        dateTime: appointmentDateTime.toISOString()
+      };
+    };
+
     const dummyAppointments: Appointment[] = [
-      {
-        id: '1',
-        serviceId: '1',
-        serviceName: 'General Consultation',
-        clientId: 'demo-user',
-        clientName: 'Demo User',
-        providerId: 'dr1',
-        providerName: 'Dr. Sarah Johnson',
-        date: today.toISOString().split('T')[0],
-        time: '10:00',
-        status: 'confirmed',
-        dateTime: new Date(today.getTime() + 2 * 60 * 60 * 1000).toISOString() // 2 hours from now
-      },
-      {
-        id: '2',
-        serviceId: '3',
-        serviceName: 'Physical Therapy Session',
-        clientId: 'demo-user',
-        clientName: 'Demo User',
-        providerId: 'pt1',
-        providerName: 'Lisa Williams, PT',
-        date: new Date(today.getTime() + 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Tomorrow
-        time: '14:00',
-        status: 'scheduled',
-        dateTime: new Date(today.getTime() + 24 * 60 * 60 * 1000 + 14 * 60 * 60 * 1000).toISOString()
-      },
-      {
-        id: '3',
-        serviceId: '2',
-        serviceName: 'Dental Cleaning',
-        clientId: 'demo-user',
-        clientName: 'Demo User',
-        providerId: 'dr2',
-        providerName: 'Dr. Michael Chen',
-        date: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0], // Last week
-        time: '09:00',
-        status: 'completed',
-        dateTime: new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000 + 9 * 60 * 60 * 1000).toISOString()
-      }
+      // Demo Client Appointments (demo@medbook.com)
+      createAppointment('1', '1', 'General Consultation', 'demo-client', 'Demo Client', 'staff-sarah', 'Dr. Sarah Johnson', 0, '10:00', 'confirmed'),
+      createAppointment('2', '3', 'Physical Therapy Session', 'demo-client', 'Demo Client', 'staff-sarah', 'Dr. Sarah Johnson', 1, '14:00', 'scheduled'),
+      createAppointment('3', '2', 'Dental Cleaning', 'demo-client', 'Demo Client', 'dr-michael', 'Dr. Michael Chen', -7, '09:00', 'completed'),
+      createAppointment('4', '6', 'Mental Health Counseling', 'demo-client', 'Demo Client', 'staff-sarah', 'Dr. Sarah Johnson', 3, '11:00', 'scheduled'),
+      createAppointment('5', '9', 'Vaccination Service', 'demo-client', 'Demo Client', 'staff-sarah', 'Dr. Sarah Johnson', -14, '15:30', 'completed'),
+
+      // Dr. Sarah Johnson's Patient Appointments (staff@medbook.com) 
+      createAppointment('6', '1', 'General Consultation', 'client-1', 'John Smith', 'staff-sarah', 'Dr. Sarah Johnson', 0, '09:00', 'confirmed'),
+      createAppointment('7', '6', 'Mental Health Counseling', 'client-2', 'Emma Wilson', 'staff-sarah', 'Dr. Sarah Johnson', 0, '15:00', 'confirmed'),
+      createAppointment('8', '3', 'Physical Therapy Session', 'client-3', 'David Brown', 'staff-sarah', 'Dr. Sarah Johnson', 1, '10:00', 'scheduled'),
+      createAppointment('9', '1', 'General Consultation', 'client-4', 'Sophie Taylor', 'staff-sarah', 'Dr. Sarah Johnson', 1, '16:00', 'scheduled'),
+      createAppointment('10', '6', 'Mental Health Counseling', 'client-5', 'Michael Davis', 'staff-sarah', 'Dr. Sarah Johnson', -2, '14:00', 'completed'),
+      createAppointment('11', '9', 'Vaccination Service', 'client-6', 'Lisa Anderson', 'staff-sarah', 'Dr. Sarah Johnson', 2, '13:30', 'scheduled'),
+      createAppointment('12', '3', 'Physical Therapy Session', 'client-7', 'Robert Johnson', 'staff-sarah', 'Dr. Sarah Johnson', -1, '11:30', 'completed'),
+      createAppointment('13', '1', 'General Consultation', 'client-8', 'Jessica White', 'staff-sarah', 'Dr. Sarah Johnson', 4, '08:30', 'scheduled'),
+
+      // Other Providers Appointments (for Admin view)
+      createAppointment('14', '2', 'Dental Cleaning', 'client-9', 'Mark Thompson', 'dr-michael', 'Dr. Michael Chen', 0, '11:00', 'confirmed'),
+      createAppointment('15', '4', 'Cardiology Consultation', 'client-10', 'Amanda Garcia', 'dr-james', 'Dr. James Rodriguez', 1, '13:00', 'scheduled'),
+      createAppointment('16', '5', 'Dermatology Checkup', 'client-11', 'Christopher Lee', 'dr-emily', 'Dr. Emily Davis', 2, '12:00', 'scheduled'),
+      createAppointment('17', '7', 'X-Ray Imaging', 'client-12', 'Natalie Brown', 'dr-lisa', 'Dr. Lisa Martinez', -1, '08:30', 'completed'),
+      createAppointment('18', '8', 'Blood Test Panel', 'client-13', 'Daniel Wilson', 'dr-robert', 'Dr. Robert Kim', 3, '07:45', 'scheduled'),
+      createAppointment('19', '2', 'Dental Cleaning', 'client-14', 'Sarah Miller', 'dr-michael', 'Dr. Michael Chen', -5, '15:30', 'cancelled'),
+      createAppointment('20', '10', 'Pediatric Checkup', 'client-15', 'Tommy Johnson', 'dr-amanda', 'Dr. Amanda Wilson', 1, '10:30', 'scheduled'),
+      createAppointment('21', '4', 'Cardiology Consultation', 'client-16', 'George Taylor', 'dr-james', 'Dr. James Rodriguez', -3, '14:15', 'completed'),
+      createAppointment('22', '5', 'Dermatology Checkup', 'client-17', 'Maria Lopez', 'dr-emily', 'Dr. Emily Davis', 5, '09:45', 'scheduled'),
+      createAppointment('23', '7', 'X-Ray Imaging', 'client-18', 'Kevin Clark', 'dr-lisa', 'Dr. Lisa Martinez', 0, '16:15', 'confirmed'),
+      createAppointment('24', '8', 'Blood Test Panel', 'client-19', 'Rachel Green', 'dr-robert', 'Dr. Robert Kim', -2, '08:00', 'completed'),
+      createAppointment('25', '10', 'Pediatric Checkup', 'client-20', 'Emily Davis Jr', 'dr-amanda', 'Dr. Amanda Wilson', 4, '14:45', 'scheduled'),
+
+      // Additional Mixed Appointments
+      createAppointment('26', '2', 'Dental Cleaning', 'client-21', 'Alex Rodriguez', 'dr-michael', 'Dr. Michael Chen', 6, '12:30', 'scheduled'),
+      createAppointment('27', '4', 'Cardiology Consultation', 'client-22', 'Jennifer White', 'dr-james', 'Dr. James Rodriguez', -4, '10:15', 'cancelled'),
+      createAppointment('28', '5', 'Dermatology Checkup', 'client-23', 'Patrick Brown', 'dr-emily', 'Dr. Emily Davis', 7, '11:30', 'scheduled'),
+      createAppointment('29', '7', 'X-Ray Imaging', 'client-24', 'Michelle Jones', 'dr-lisa', 'Dr. Lisa Martinez', 1, '13:45', 'scheduled'),
+      createAppointment('30', '8', 'Blood Test Panel', 'client-25', 'Steven Wilson', 'dr-robert', 'Dr. Robert Kim', -6, '09:15', 'completed')
     ];
 
     setAppointments(dummyAppointments);
@@ -253,10 +317,20 @@ function App() {
       
       // Fallback to demo mode if API is not available
       const demoUser: User = {
-        id: 'demo-user',
-        firstName: 'Demo',
-        lastName: 'User',
+        id: email === 'admin@medbook.com' ? 'admin-user' :
+            email === 'demo@medbook.com' ? 'demo-client' :
+            email === 'sarah.johnson@medbook.com' ? 'staff-sarah' :
+            'demo-user',
+        firstName: email === 'admin@medbook.com' ? 'Admin' : 
+                  email === 'demo@medbook.com' ? 'Demo' :
+                  email === 'sarah.johnson@medbook.com' ? 'Sarah' :
+                  email.split('@')[0],
+        lastName: email === 'admin@medbook.com' ? 'User' : 
+                 email === 'demo@medbook.com' ? 'Client' :
+                 email === 'sarah.johnson@medbook.com' ? 'Johnson' :
+                 'User',
         name: email === 'admin@medbook.com' ? 'Admin User' : 
+              email === 'demo@medbook.com' ? 'Demo Client' :
               email === 'sarah.johnson@medbook.com' ? 'Dr. Sarah Johnson' :
               email.split('@')[0],
         email,
@@ -701,7 +775,10 @@ function App() {
     // Staff Dashboard - Patient management and schedule
     if (currentUser?.role === 'staff') {
       const staffAppointments = appointments?.filter(apt => 
-        apt.providerName?.includes(currentUser.firstName) || apt.providerId === currentUser.id
+        apt.providerName?.includes(currentUser.firstName) || 
+        apt.providerId === currentUser.id ||
+        apt.providerId === 'staff-sarah' ||
+        (currentUser.email === 'sarah.johnson@medbook.com' && apt.providerName?.includes('Sarah'))
       ) || [];
 
       return (
@@ -792,37 +869,45 @@ function App() {
               <div className="bg-purple-600 text-white p-6 rounded-xl">
                 <div className="text-3xl mb-2">📊</div>
                 <h3 className="text-lg font-semibold">My Appointments</h3>
-                <p className="text-purple-100 text-sm">{appointments?.length || 0} total</p>
+                <p className="text-purple-100 text-sm">{appointments?.filter(apt => apt.clientId === currentUser?.id || apt.clientName?.includes(currentUser?.firstName || ''))?.length || 0} total</p>
               </div>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">👤 My Appointments</h2>
-              {!appointments || appointments.length === 0 ? (
-                <p className="text-gray-500 text-center py-8">No appointments yet. Book your first appointment!</p>
-              ) : (
-                <div className="space-y-4">
-                  {appointments.map((appointment) => (
-                    <div key={appointment.id} className="border border-gray-200 rounded-lg p-4">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <h3 className="font-medium text-gray-900">{appointment.serviceName}</h3>
-                          <p className="text-gray-600 text-sm">with {appointment.providerName}</p>
-                          <p className="text-gray-500 text-sm">{appointment.date} at {appointment.time}</p>
+              {(() => {
+                const clientAppointments = appointments?.filter(apt => 
+                  apt.clientId === currentUser?.id || 
+                  apt.clientName?.includes(currentUser?.firstName || '') ||
+                  (currentUser?.email === 'demo@medbook.com' && apt.clientId === 'demo-client')
+                ) || [];
+                
+                return clientAppointments.length === 0 ? (
+                  <p className="text-gray-500 text-center py-8">No appointments yet. Book your first appointment!</p>
+                ) : (
+                  <div className="space-y-4">
+                    {clientAppointments.map((appointment) => (
+                      <div key={appointment.id} className="border border-gray-200 rounded-lg p-4">
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <h3 className="font-medium text-gray-900">{appointment.serviceName}</h3>
+                            <p className="text-gray-600 text-sm">with {appointment.providerName}</p>
+                            <p className="text-gray-500 text-sm">{appointment.date} at {appointment.time}</p>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                            appointment.status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' :
+                            appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                            appointment.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                            'bg-red-100 text-red-800'
+                          }`}>
+                            {appointment.status}
+                          </span>
                         </div>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          appointment.status === 'scheduled' ? 'bg-yellow-100 text-yellow-800' :
-                          appointment.status === 'confirmed' ? 'bg-green-100 text-green-800' :
-                          appointment.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                          'bg-red-100 text-red-800'
-                        }`}>
-                          {appointment.status}
-                        </span>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+                    ))}
+                  </div>
+                );
+              })()}
             </div>
           </div>
         </div>

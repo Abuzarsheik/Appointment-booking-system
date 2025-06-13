@@ -341,6 +341,9 @@ function App() {
       setCurrentUser(demoUser);
       localStorage.setItem('userData', JSON.stringify(demoUser));
       setCurrentView('dashboard');
+
+      // Load dummy data for demo mode
+      loadDummyData();
     }
 
     setLoading(false);
@@ -367,6 +370,8 @@ function App() {
       }
     } catch (error) {
       console.log('Using dummy data due to API error');
+      // Load dummy data as fallback
+      loadDummyData();
     }
   };
 
@@ -408,6 +413,9 @@ function App() {
 
       setCurrentUser(demoUser);
       setCurrentView('dashboard');
+
+      // Load dummy data for demo mode
+      loadDummyData();
     }
 
     setLoading(false);
@@ -727,8 +735,8 @@ function App() {
                   className="bg-green-600 text-white p-6 rounded-xl hover:bg-green-700 transition-colors"
                 >
                   <div className="text-3xl mb-2">🏥</div>
-                  <h3 className="text-lg font-semibold">Manage Services</h3>
-                  <p className="text-green-100 text-sm">Add/Edit services</p>
+                  <h3 className="text-lg font-semibold">View Services</h3>
+                  <p className="text-green-100 text-sm">Browse available services</p>
                 </button>
                 <div className="bg-purple-600 text-white p-6 rounded-xl">
                   <div className="text-3xl mb-2">📊</div>
@@ -802,8 +810,8 @@ function App() {
                   className="bg-green-600 text-white p-6 rounded-xl hover:bg-green-700 transition-colors"
                 >
                   <div className="text-3xl mb-2">🏥</div>
-                  <h3 className="text-lg font-semibold">My Services</h3>
-                  <p className="text-green-100 text-sm">Services I provide</p>
+                  <h3 className="text-lg font-semibold">View Services</h3>
+                  <p className="text-green-100 text-sm">Browse available services</p>
                 </button>
               </div>
 

@@ -657,13 +657,13 @@ function App() {
             <div className="bg-purple-600 text-white p-6 rounded-xl">
               <div className="text-3xl mb-2">📊</div>
               <h3 className="text-lg font-semibold">My Appointments</h3>
-              <p className="text-purple-100 text-sm">{appointments.length} total</p>
+              <p className="text-purple-100 text-sm">{appointments?.length || 0} total</p>
             </div>
           </div>
 
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4">Recent Appointments</h2>
-            {appointments.length === 0 ? (
+            {!appointments || appointments.length === 0 ? (
               <p className="text-gray-500 text-center py-8">No appointments yet. Book your first appointment!</p>
             ) : (
               <div className="space-y-4">
@@ -739,7 +739,7 @@ function App() {
                     required
                   >
                     <option value="">Choose a service...</option>
-                    {services.map((service) => (
+                    {services?.map((service) => (
                       <option key={service.id} value={service.id}>
                         {service.name} - ${service.price.amount} ({service.duration} min)
                       </option>
@@ -813,7 +813,7 @@ function App() {
 
       <div className="max-w-4xl mx-auto py-8 px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {services.map((service) => (
+          {services?.map((service) => (
             <div key={service.id} className="bg-white rounded-xl shadow-sm p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-2">{service.name}</h3>
               <p className="text-gray-600 text-sm mb-4">{service.description}</p>

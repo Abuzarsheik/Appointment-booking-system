@@ -54,12 +54,14 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<string | null>(null);
 
-  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
-
   // Enhanced API call with error handling
   const apiCall = async (endpoint: string, options: RequestInit = {}) => {
     try {
       const token = localStorage.getItem('authToken');
+      // Use Railway URL in production, localhost in development
+      const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:5000' 
+        : 'https://appointment-booking-system-production.up.railway.app';
       const response = await fetch(`${API_URL}/api${endpoint}`, {
         headers: {
           'Content-Type': 'application/json',
